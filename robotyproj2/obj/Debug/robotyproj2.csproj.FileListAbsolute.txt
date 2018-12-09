@@ -1,0 +1,9 @@
+c:\users\euro\documents\visual studio 2015\Projects\robotyproj2\robotyproj2\bin\Debug\robotyproj2.exe.config
+c:\users\euro\documents\visual studio 2015\Projects\robotyproj2\robotyproj2\bin\Debug\robotyproj2.exe
+c:\users\euro\documents\visual studio 2015\Projects\robotyproj2\robotyproj2\bin\Debug\robotyproj2.pdb
+c:\users\euro\documents\visual studio 2015\Projects\robotyproj2\robotyproj2\obj\Debug\robotyproj2.csprojResolveAssemblyReference.cache
+c:\users\euro\documents\visual studio 2015\Projects\robotyproj2\robotyproj2\obj\Debug\robotyproj2.Form1.resources
+c:\users\euro\documents\visual studio 2015\Projects\robotyproj2\robotyproj2\obj\Debug\robotyproj2.Properties.Resources.resources
+c:\users\euro\documents\visual studio 2015\Projects\robotyproj2\robotyproj2\obj\Debug\robotyproj2.csproj.GenerateResource.Cache
+c:\users\euro\documents\visual studio 2015\Projects\robotyproj2\robotyproj2\obj\Debug\robotyproj2.exe
+c:\users\euro\documents\visual studio 2015\Projects\robotyproj2\robotyproj2\obj\Debug\robotyproj2.pdb
