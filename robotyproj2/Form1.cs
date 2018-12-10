@@ -16,11 +16,13 @@ namespace robotyproj2
         private Label label1;
         private Button button1;
         Pen blackPen = new Pen(Color.Black, 3);
-        Pen bluePen = new Pen(Color.Blue, 10);
+        Pen bluePen = new Pen(Color.Blue, 6);
+        Pen redPen = new Pen(Color.Red, 3);
         Color czerwony = Color.Red; // ustalenie czerwonego koloru
         Color czarny = Color.Black; // ustalenie czarnego koloru
         Color zielony = Color.Green; // ustalenie czarnego koloru
         private Button button2;
+        
 
         // Bitmap image1;
         Bitmap image1 = new Bitmap(@"C:\WORLDMAP\worldmap.png", true);
@@ -70,7 +72,7 @@ namespace robotyproj2
             this.button2.TabIndex = 3;
             this.button2.Text = "Znajdż drogę";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+    
             // 
             // Form1
             // 
@@ -89,6 +91,9 @@ namespace robotyproj2
         public Form1()
         {
             InitializeComponent();
+            //Set the PictureBox to display the image.
+            pictureBox1.Image = image1;
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
 
         }
 
@@ -100,7 +105,7 @@ namespace robotyproj2
 
         private void button1_Click(object sender, EventArgs e) //Znalezienie losowych puntków na wodzie, rysowanie
         {
-           
+            
             int x, y;
             /*int[,] mapa = new int[image1.Width, image1.Height];
 
@@ -122,60 +127,102 @@ namespace robotyproj2
             }*/
 
             Graphics g = Graphics.FromImage(image1);
-  
 
-            int i=1;
-            int[,] bufor = new int[2,5000];
+            int MAX = 1500; //ile punktów losujemy     
+            int[,] bufor = new int[2, MAX];
+            int i = 1;
             ///Losowanie 5000 dowolnych punktów
             /// 
-             Random rnd = new Random();
+            Random rnd = new Random();
 
-             while (i<=((bufor.Length/2)-2))
-             {
-                 x = rnd.Next(1, 3592);
-                 y = rnd.Next(1, 2416);
+            while (i < ((MAX-2)))
+            {
+                x = rnd.Next(1, 3592);
+                y = rnd.Next(1, 2416);
 
                 Color pixelColor = image1.GetPixel(x, y); //Pobranie koloru piksela     
-               
-                if (pixelColor.R!=0) //Wybieranie tych, które znajdują się na wodzie (nie są w kolorze czarnym)
-                 {
-                     bufor[0, i] = x;
-                     bufor[1, i] = y;
-                    
+
+                if (pixelColor.R != 0) //Wybieranie tych, które znajdują się na wodzie (nie są w kolorze czarnym)
+                {
+                    bufor[0, i] = x;
+                    bufor[1, i] = y;
+
                     SolidBrush myBrush = new SolidBrush(Color.Black); //rysowanie czarnych punktów dookoła wybranych pikseli
                     g.FillEllipse(myBrush, new Rectangle(x, y, 10, 10));
                 }
                 i++;
-             }
+            }
+            bufor[0, MAX] = 3049;
+            bufor[1, MAX] = 775;
+            bufor[0, MAX - 1] = 1775;
+            bufor[1, MAX - 1] = 561;
 
             //Narysowanie punktu startowego i końcowego (Tokio-Londyn)   
-            SolidBrush myBrush1 = new SolidBrush(Color.Green); 
+            SolidBrush myBrush1 = new SolidBrush(Color.Green);
             g.FillEllipse(myBrush1, new Rectangle(3049, 775, 20, 20));
 
             SolidBrush myBrush2 = new SolidBrush(Color.Red);
-            g.FillEllipse(myBrush2, new Rectangle(1775, 561, 20, 20));     
+            g.FillEllipse(myBrush2, new Rectangle(1775, 561, 20, 20));
 
-            //Set the PictureBox to display the image.
-            pictureBox1.Image = image1;
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            // Display in Label1.
-            label1.Text = "Zakończono rysowanie";
-         
+            ///Rysowanie ścieżek
+            /// 
+
+            for (i = 0; i < MAX; i++)
+            {
+                int odl_min = 20; ///min. odległość od wierzchołka sąsiedniego
+                int odl_max = 150; //max. odległość od wierzchołka sąsiedniego
+                int sasiad = i;
+
+                for (int z = 0; z < MAX; z++)
+                {
+
+                    if (dlugosc(bufor[0, z], bufor[1, z], bufor[0, sasiad], bufor[1, sasiad]) > odl_min)
+                    {
+
+                        if (dlugosc(bufor[0, z], bufor[1, z], bufor[0, sasiad], bufor[1, sasiad]) < odl_max)
+                        {
+
+
+                            using (var graphics = Graphics.FromImage(image1))
+                            {
+                                graphics.DrawLine(bluePen, bufor[0, z], bufor[1, z], bufor[0, sasiad], bufor[1, sasiad]);
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+
+            ////Poszukiwanie drogi i rysowanie jej
+            int k = 0;
+            
+            //szukanie(bufor[0, MAX], bufor[1, MAX]);
+                // Display in Label1.
+                label1.Text = "Zakończono rysowanie";
+                pictureBox1.Image = image1;
+                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            
         }
+        
 
-        private void button2_Click(object sender, EventArgs e) ///Wykonanie algorytmu szukającego drogi
+        public int dlugosc(int x_pocz, int y_pocz,int x_koniec,int y_koniec) // 
         {
-
-
-
-
-
-
-
-
-
-
-
+            
+            float odl_x = Math.Abs(x_pocz - x_koniec);
+            float odl_y = Math.Abs(y_pocz -y_koniec);
+            int odl = (int)Math.Sqrt(odl_x * odl_x + odl_y * odl_y);
+            return odl;
         }
+
+
+        /* szukanie(int x_pocz, int y_pocz) // 
+        {
+            int punkt_x = 0, punkt_y = 0;
+
+            
+        }*/
+
     }  
 }
